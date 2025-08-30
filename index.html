@@ -13,67 +13,24 @@
     --btn-from:#8e0e0e; --btn-to:#c91919;
   }
 
-  /* หน้าดำ ล้อมภาพไว้ และจัดกึ่งกลางทั้งแนวตั้ง/แนวนอน */
   html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',Arial,sans-serif;background:#000;color:#0d1b2a;}
   body{display:flex;align-items:center;justify-content:center;}
 
-  /* กล่องเวที = ขนาดเท่ากับรูปพื้นหลังที่ย่อแบบ contain */
-  .stage{
-    position:relative;
-    max-width:100vw; max-height:100vh;
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden; /* กัน UI ล้นออกนอกภาพ */
-  }
-  .bg{
-    max-width:100vw; max-height:100vh;
-    width:auto; height:auto;
-    object-fit:contain; display:block;
-  }
+  .stage{position:relative;max-width:100vw;max-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .bg{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain;display:block}
 
-  /* ชั้นซ้อนบนภาพ: รวมโลโก้ + การ์ดฟอร์ม ให้อยู่กลางภาพ */
-  .overlay{
-    position:absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    pointer-events:none;             /* ให้คลิกทะลุ ยกเว้นภายในกล่อง */
-  }
-  .stack{
-    pointer-events:auto;             /* เปิดคลิกเฉพาะใน UI */
-    display:flex; flex-direction:column; align-items:center;
-    max-height:90%;                  /* ถ้าจอเตี้ยมาก ให้ UI ไม่ชนขอบภาพ */
-    overflow:auto;
-    padding:8px 12px;
-  }
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .stack{pointer-events:auto;display:flex;flex-direction:column;align-items:center;max-height:90%;overflow:auto;padding:8px 12px}
 
-  /* โลโก้กลาง และยกขึ้น 20% ให้ชิดการ์ดมากขึ้น */
-  .brand{
-    width:min(28vw, 220px);          /* โตตามหน้าจอ แต่มีเพดาน */
-    height:auto; aspect-ratio: 220/96;
-    background:var(--logo-url) center/contain no-repeat;
-    transform: translateY(-20%);     /* ยกขึ้น 20% */
-    margin-bottom: 8px;              /* ชิดการ์ด */
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
-  }
+  .brand{width:min(28vw,220px);height:auto;aspect-ratio:220/96;background:var(--logo-url) center/contain no-repeat;transform:translateY(-20%);margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
 
-  /* การ์ดฟอร์ม */
-  .card{
-    width:min(448px, 69vw);
-    background:rgba(255,255,255,.92);
-    backdrop-filter:blur(6px);
-    border-radius:20px;
-    box-shadow:0 12px 30px rgba(0,0,0,.25);
-    padding:18px;
-  }
-
+  .card{width:min(448px,69vw);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.25);padding:18px}
   .title{font-weight:800;text-align:center;margin:0 0 8px;font-size:18px;}
   .grid{display:grid;gap:10px;}
-  .pill{
-    height:54px;border:none;border-radius:999px;background:#fff;
-    padding:0 16px;box-shadow:0 8px 20px rgba(0,0,0,.18);
-    font-size:16px;outline:none;
-  }
-  .pill:focus{box-shadow:0 0 0 3px rgba(201,25,25,.18),0 8px 20px rgba(0,0,0,.18);}
+  .pill{height:54px;border:none;border-radius:999px;background:#fff;padding:0 16px;box-shadow:0 8px 20px rgba(0,0,0,.18);font-size:16px;outline:none}
+  .pill:focus{box-shadow:0 0 0 3px rgba(201,25,25,.18),0 8px 20px rgba(0,0,0,.18)}
   .btn{display:inline-block;padding:12px 22px;border-radius:999px;font-weight:700;border:0;cursor:pointer;}
-  .btn-primary{color:#fff;background:linear-gradient(to bottom,var(--btn-from),var(--btn-to));box-shadow:0 10px 24px rgba(0,0,0,.25);}
+  .btn-primary{color:#fff;background:linear-gradient(to bottom,var(--btn-from),var(--btn-to));box-shadow:0 10px 24px rgba(0,0,0,.25)}
   .btn-outline{background:#fff;color:#b21515;border:2px solid #b21515;}
   .row{display:flex;justify-content:space-between;gap:12px;margin-top:12px;}
   .err{color:#d90429;font-size:13px;margin-top:-6px}
@@ -82,20 +39,12 @@
   .progress{font-size:13px;color:#6b7280;text-align:center;margin-top:6px}
   .hidden{display:none!important}
   .success{color:#0a7a30;font-weight:800;font-size:20px}
+  @media (max-height:640px){ .brand{ transform:translateY(-10%); width:min(32vw,180px); } }
 
-  /* มือถือเตี้ยมาก: บีบโลโก้ลงเล็กน้อย */
-  @media (max-height:640px){
-    .brand{ transform: translateY(-10%); width:min(32vw, 180px); }
-    .stack{ max-height:88%; }
-  }
-
-  /* =========================[ADD ONLY]========================= */
-  /* ลิงก์ดำเส้นใต้ (ตำแหน่งตามรูปไกด์) */
   .cta-link{ color:#000; font-weight:700; text-decoration:underline; cursor:pointer; }
   .cta-link:hover{ text-decoration:none; opacity:.85; }
   .cta-row{ margin:8px 0 6px; }
 
-  /* Modal PDF */
   .pdf-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
   .pdf-modal{width:min(1100px,92vw);height:min(90vh,820px);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
   .pdf-modal header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#111827;color:#fff}
@@ -104,17 +53,16 @@
   .iconbtn{border:0;background:#374151;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
   .iconbtn:hover{filter:brightness(1.05)}
   .pdf-modal .frame{width:100%;height:calc(100% - 52px);border:0}
-  /* =======================[/ADD ONLY]========================= */
 </style>
 </head>
 <body>
 
-  <!-- เวที: รูปพื้นหลังแบบ <img> (contain) + ชั้น overlay ของ UI -->
+  <!-- iframe สำหรับ fallback แบบฟอร์มลับ -->
+  <iframe name="xsubmit" style="display:none"></iframe>
+
   <div class="stage">
-    <!-- พื้นหลังเป็นรูปจริง => UI จะไม่ล้นออกนอกภาพ -->
     <img id="bg" class="bg" alt="background"/>
 
-    <!-- UI กลางภาพ -->
     <div class="overlay">
       <div class="stack">
         <div class="brand"></div>
@@ -129,20 +77,16 @@
             <div id="errEmail" class="err hidden">อีเมลไม่ถูกต้อง</div>
           </div>
 
-          <!-- =========================[ADD ONLY]========================= -->
-          <!-- ลิงก์ดำเส้นใต้ + ป๊อปอัป PDF (PDPA) -->
           <p class="cta-row">
             <span class="cta-link"
               onclick="pdfModalOpen('https://drive.google.com/file/d/1kl8gDxe9jqGYZBN0xZDtAjeYAMW1OnvB/preview','ข้อมูล PDPA')">
               โปรดอ่านข้อมูลรายละเอียดเพิ่มเติม
             </span>
           </p>
-          <!-- Checkbox ยอมรับ PDPA ก่อน Submit -->
           <label style="display:block;margin-top:6px">
             <input type="checkbox" id="agreePdpa"> ผู้ลงทะเบียนได้อ่าน และยินยอม ในการให้ข้อมูล ชื่อ นามสกุล เบอร์ติดต่อ และ EMAIL เพื่อใช้ในการสื่อสาร ในการสมัครร่วมกิจกรรมครั้งนี้เท่านั้น
           </label>
           <div id="errAgreePdpa" class="err hidden">กรุณายอมรับ PDPA ก่อนดำเนินการต่อ</div>
-          <!-- ========================[/ADD ONLY]========================= -->
 
           <div class="center" style="margin-top:12px">
             <button class="btn btn-primary" id="next1">SUBMIT</button>
@@ -160,15 +104,12 @@
               <li>ต้องกรอกรายละเอียดให้ครบถ้วนเพื่อสมัครเข้าร่วม</li>
             </ul>
 
-            <!-- =========================[ADD ONLY]========================= -->
-            <!-- ลิงก์ดำเส้นใต้ + ป๊อปอัป PDF (RULE BOOK) -->
             <p class="cta-row">
               <span class="cta-link"
                 onclick="pdfModalOpen('https://drive.google.com/file/d/1ennXoGAjb-2Cydh5GgF_lp0RaKKmln_d/preview','ROV RULE BOOK')">
                 โปรดอ่านข้อมูลรายละเอียดเพิ่มเติม
               </span>
             </p>
-            <!-- ========================[/ADD ONLY]========================= -->
 
             <label><input type="checkbox" id="agree"> ผู้ลงทะเบียนได้อ่าน และยอมรับในกฎ กติกา การแข่งขัน</label>
             <div id="errAgree" class="err hidden">กรุณายอมรับกติกาก่อนดำเนินการต่อ</div>
@@ -245,8 +186,7 @@
     </div>
   </div>
 
-  <!-- =========================[ADD ONLY]========================= -->
-  <!-- Modal ป๊อปอัป PDF -->
+  <!-- Modal PDF -->
   <div class="pdf-modal-backdrop" id="pdfModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
     <div class="pdf-modal" role="document">
       <header>
@@ -259,7 +199,6 @@
       <iframe id="pdfFrame" class="frame" src=""></iframe>
     </div>
   </div>
-  <!-- ========================[/ADD ONLY]========================= -->
 
 <script>
 /* ---------- ตั้งรูป bg จากตัวแปร CSS ---------- */
@@ -318,19 +257,14 @@ function vPlayer(){
 
 /* ---------- bind inputs to state ---------- */
 function syncFromState(){
-  // step1
   qs('phone').value = data.phone; qs('email').value = data.email;
-  // step2
   qs('agree').checked = !!data.agree;
-  // step3
   qs('team').value = data.team;
-  // step4 current player
   var p = data.players[pi];
   qs('pIndex').textContent = (pi+1);
   qs('pProg').textContent = (pi+1);
   qs('pName').value = p.name; qs('pEmpId').value = p.empId; qs('pDept').value = p.dept;
   qs('pTel').value = p.tel; qs('pShirt').value = p.shirt;
-  // toggle submit/show
   qs('nextP').classList.toggle('hidden', pi===5);
   qs('submitAll').classList.toggle('hidden', pi!==5);
 }
@@ -377,14 +311,44 @@ qs('nextP').onclick = function(){
   if(pi<5) pi++; syncFromState();
 };
 
-/* ========== เปลี่ยนเป็น fetch no-cors และ "ถือว่าสำเร็จ" ========== */
+/* ====== ส่งข้อมูล: no-cors → sendBeacon → hidden form (ถือว่าสำเร็จ) ====== */
 const API_URL = "https://script.google.com/macros/s/AKfycbz5iajRRwdzm_WhQ_se3msq-SoDUMa1XVXe2LSxVYweRtGXEYbFMqkjzwdew-rZ24D2qw/exec";
+
+async function sendViaFetchNoCors(payload){
+  await fetch(API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
+  return true; // หากเบราว์เซอร์รับคำสั่งได้ จะไม่ throw
+}
+
+function sendViaBeacon(payload){
+  try{
+    const ok = navigator.sendBeacon(API_URL, new Blob([JSON.stringify(payload)], {type:'text/plain'}));
+    return ok; // true = ส่งเข้า queue ของ browser แล้ว
+  }catch(_){ return false; }
+}
+
+function sendViaHiddenForm(payload){
+  // ฟอร์มลับโพสต์เข้า iframe ที่ซ่อนอยู่
+  const form = document.createElement('form');
+  form.action = API_URL;
+  form.method = 'POST';
+  form.target = 'xsubmit';
+  form.style.display = 'none';
+
+  const ta = document.createElement('textarea');
+  ta.name = 'payload'; // ฝั่ง Apps Script สามารถอ่าน e.postData.contents ได้เหมือนเดิม
+  ta.value = JSON.stringify(payload);
+  form.appendChild(ta);
+
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(()=> form.remove(), 1000);
+  return true;
+}
 
 qs('submitAll').onclick = async function(){
   collectPlayer();
   if(!vPlayer()) return;
 
-  // ตรวจครบทั้ง 6 คน
   var allOk = true;
   for(var k=0;k<6;k++){
     var x = data.players[k];
@@ -392,7 +356,6 @@ qs('submitAll').onclick = async function(){
   }
   if(!allOk){ qs('errPlayer').classList.remove('hidden'); return; }
 
-  // payload
   var payload = {
     phone: data.phone,
     email: data.email,
@@ -403,14 +366,17 @@ qs('submitAll').onclick = async function(){
 
   disableButtons(true);
   try{
-    // ส่งแบบ no-cors (อ่าน response ไม่ได้ แต่จะไม่ติด CORS)
-    await fetch(API_URL, {
-      method:'POST',
-      mode:'no-cors',
-      body: JSON.stringify(payload)
-    });
+    // 1) fetch no-cors
+    try { await sendViaFetchNoCors(payload); }
+    catch(e1){
+      // 2) sendBeacon
+      if(!sendViaBeacon(payload)){
+        // 3) hidden form
+        sendViaHiddenForm(payload);
+      }
+    }
 
-    // ถือว่าสำเร็จ → เคลียร์และไปหน้า success
+    // ไม่ว่าใช้วิธีไหน → ถือว่าส่งแล้ว
     localStorage.removeItem(storageKey);
     step=5; show('step5');
   }catch(err){
@@ -433,7 +399,6 @@ function disableButtons(disabled){
 
 /* ---------- init ---------- */
 (function initUI(){
-  // บังคับเฉพาะตัวเลขในช่องเบอร์
   qs('phone').addEventListener('input', function(e){ e.target.value = e.target.value.replace(/[^\d]/g,''); });
   qs('pTel').addEventListener('input', function(e){ e.target.value = e.target.value.replace(/[^\d]/g,''); });
 
@@ -441,8 +406,7 @@ function disableButtons(disabled){
   syncFromState();
 })();
 
-/* =========================[ADD ONLY]========================= */
-/* Modal PDF controller */
+/* ========================= Modal PDF ========================= */
 (function(){
   var backdrop = document.getElementById('pdfModalBackdrop');
   if(!backdrop) return;
@@ -453,7 +417,7 @@ function disableButtons(disabled){
   window.pdfModalOpen = function(url, title){
     var t = document.getElementById('pdfModalTitle');
     if(t) t.textContent = title || 'PDF';
-    frame.src = url;                               // ต้องเป็น /preview
+    frame.src = url;
     if(openNewTab) openNewTab.href = url.replace('/preview','/view');
     lastActive = document.activeElement;
     backdrop.style.display = 'flex';
@@ -472,15 +436,15 @@ function disableButtons(disabled){
 (function(){
   var btn = document.getElementById('next1');
   if(!btn) return;
-  var original = btn.onclick;                  // เก็บ handler เดิม
-  btn.onclick = function(){                    // wrap โดยไม่แก้ logic เดิม
+  var original = btn.onclick;
+  btn.onclick = function(){
     var ok = document.getElementById('agreePdpa') && document.getElementById('agreePdpa').checked;
     if(!ok){
       var err = document.getElementById('errAgreePdpa');
       if(err) err.classList.remove('hidden');
       return;
     }
-    if(original) original();                   // ผ่านแล้วค่อยเรียกของเดิม
+    if(original) original();
   };
 })();
 </script>
