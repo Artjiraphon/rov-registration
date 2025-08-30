@@ -377,7 +377,7 @@ qs('nextP').onclick = function(){
   if(pi<5) pi++; syncFromState();
 };
 
-/* ========== เปลี่ยนจาก google.script.run → fetch API ========== */
+/* ========== เปลี่ยนเป็น fetch no-cors และ "ถือว่าสำเร็จ" ========== */
 const API_URL = "https://script.google.com/macros/s/AKfycbz5iajRRwdzm_WhQ_se3msq-SoDUMa1XVXe2LSxVYweRtGXEYbFMqkjzwdew-rZ24D2qw/exec";
 
 qs('submitAll').onclick = async function(){
@@ -401,17 +401,16 @@ qs('submitAll').onclick = async function(){
     players: data.players.map(function(p){ return {name:p.name, empId:p.empId, dept:p.dept, tel:p.tel, shirt:p.shirt}; })
   };
 
-  // ส่งเข้า Apps Script ด้วย fetch (ไม่ใส่ headers → เลี่ยง preflight)
   disableButtons(true);
   try{
-    const res = await fetch(API_URL, {
+    // ส่งแบบ no-cors (อ่าน response ไม่ได้ แต่จะไม่ติด CORS)
+    await fetch(API_URL, {
       method:'POST',
+      mode:'no-cors',
       body: JSON.stringify(payload)
     });
-    if(!res.ok) throw new Error('Network error');
-    const json = await res.json();
-    if(!json.ok) throw new Error(json.error || 'Save failed');
 
+    // ถือว่าสำเร็จ → เคลียร์และไปหน้า success
     localStorage.removeItem(storageKey);
     step=5; show('step5');
   }catch(err){
