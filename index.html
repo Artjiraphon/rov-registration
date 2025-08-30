@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ROV DREAM WAR – Registration</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',sans-serif;background:#f7fafc;color:#111}
+    .wrap{max-width:860px;margin:24px auto;padding:0 16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;box-shadow:0 2px 6px rgba(0,0,0,.04);margin-bottom:14px}
+    h1{margin:0 0 6px} .muted{color:#6b7280}
+    label{font-weight:600;font-size:14px}
+    input,select,button,textarea{font:inherit;padding:11px;border:1px solid #d1d5db;border-radius:10px;background:#fff}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .err{color:#dc2626;font-size:13px;margin-top:4px;display:none}
+    .ok{color:#059669}
+    .status{margin-top:10px;font-size:14px}
+    button{cursor:pointer;background:#111827;color:#fff;border:none}
+    button[disabled]{opacity:.6;cursor:not-allowed}
+    .success{display:none}
+    .player{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    @media (max-width:720px){ .row,.player{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>ลงทะเบียนเข้าร่วมกิจกรรม</h1>
+      <p class="muted">ไม่มีล็อกอิน ไม่มีป๊อปอัป — ส่งข้อมูลและดูสถานะในหน้านี้</p>
+    </div>
+
+    <!-- คำอธิบาย/PDPA/กติกา -->
+    <div class="card">
+      <h2>กติกา & PDPA</h2>
+      <p class="muted">โปรดอ่านรายละเอียดจากลิงก์ด้านล่าง (เปิดแท็บใหม่):</p>
+      <ul>
+        <li><a href="https://example.com/rules.pdf" target="_blank" rel="noopener">กติกาการแข่งขัน (PDF)</a></li>
+        <li><a href="https://example.com/pdpa.pdf" target="_blank" rel="noopener">นโยบายข้อมูลส่วนบุคคล (PDF)</a></li>
+      </ul>
+    </div>
+
+    <!-- แบบฟอร์ม -->
+    <div class="card">
+      <h2>แบบฟอร์มลงทะเบียน</h2>
+
+      <form id="form" novalidate>
+        <div class="row">
+          <div>
+            <label>เบอร์โทร (10 หลัก)</label>
+            <input name="phone" inputmode="tel" pattern="\\d{10}" required />
+            <div class="err" data-err="phone">กรุณากรอกเบอร์ 10 หลัก</div>
+          </div>
+          <div>
+            <label>อีเมล</label>
+            <input name="email" type="email" required />
+            <div class="err" data-err="email">อีเมลไม่ถูกต้อง</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label>ชื่อทีม</label>
+          <input name="team" minlength="2" maxlength="20" required />
+          <div class="err" data-err="team">กรุณากรอกชื่อทีม 2–20 ตัวอักษร</div>
+        </div>
+
+        <h3 style="margin:16px 0 6px">ผู้เล่น 6 คน</h3>
+        <div id="players"></div>
+
+        <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:400">
+          <input type="checkbox" id="agree" required /> ยอมรับกติกาและนโยบายข้อมูลส่วนบุคคล
+        </label>
+        <div class="err" data-err="agree">กรุณายอมรับก่อนส่ง</div>
+
+        <div class="status" id="status"></div>
+        <button type="submit" id="submitBtn">ยืนยันการลงทะเบียน</button>
+      </form>
+    </div>
+
+    <!-- สำเร็จ -->
+    <div class="card success" id="successBox">
+      <h2 class="ok">ลงทะเบียนสำเร็จ</h2>
+      <p>เราได้รับข้อมูลของคุณแล้ว ทีมงานจะติดต่อกลับหากมีข้อมูลเพิ่มเติม</p>
+      <h3>ข้อมูลที่ส่ง</h3>
+      <pre id="echo" style="background:#f3f4f6;padding:12px;border-radius:10px;overflow:auto"></pre>
+    </div>
+  </div>
+
+<script>
+const API_URL = 'PUT_YOUR_EXEC_URL_HERE'; // วาง URL /exec จาก Apps Script
+
+// สร้างฟิลด์ผู้เล่น 6 ช่อง
+const playersBox = document.getElementById('players');
+for (let i=1;i<=6;i++){
+  playersBox.insertAdjacentHTML('beforeend', `
+    <fieldset class="player">
+      <legend>ผู้เล่น #${i}</legend>
+      <input name="p${i}_name" placeholder="ชื่อ–นามสกุล" required />
+      <input name="p${i}_emp_id" placeholder="รหัสพนักงาน" required />
+      <input name="p${i}_dept" placeholder="แผนก" required />
+      <input name="p${i}_tel" placeholder="เบอร์โทร (10 หลัก)" inputmode="tel" required />
+      <select name="p${i}_shirt" required>
+        <option value="">ขนาดเสื้อ</option>
+        <option>S</option><option>M</option><option>L</option>
+        <option>XL</option><option>2XL</option><option>3XL</option>
+      </select>
+    </fieldset>
+  `);
+}
+
+const $ = s => document.querySelector(s);
+const statusBox = $('#status');
+const successBox = $('#successBox');
+const echo = $('#echo');
+const form = $('#form');
+const submitBtn = $('#submitBtn');
+
+function showErr(key, show){
+  const el = document.querySelector(`.err[data-err="${key}"]`);
+  if(el) el.style.display = show ? 'block' : 'none';
+}
+function isPhone10(v){ return /^\d{10}$/.test(String(v||'').trim()); }
+function isEmail(v){ return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(v||'').trim()); }
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  statusBox.textContent = '';
+  successBox.style.display = 'none';
+
+  const fd = new FormData(form);
+  const phone = (fd.get('phone')||'').replace(/\\D/g,'');
+  const email = (fd.get('email')||'').trim();
+  const team  = (fd.get('team')||'').trim();
+  const agree = $('#agree').checked;
+
+  // validate inline
+  let ok = true;
+  showErr('phone', !(ok = ok && isPhone10(phone)) && true);
+  showErr('email', !(ok = ok && isEmail(email)) && true);
+  showErr('team',  !(ok = ok && team.length>=2 && team.length<=20) && true);
+  showErr('agree', !(ok = ok && agree) && true);
+
+  const players = [];
+  for (let i=1;i<=6;i++){
+    const p = {
+      name: (fd.get(`p${i}_name`)||'').trim(),
+      empId:(fd.get(`p${i}_emp_id`)||'').trim(),
+      dept: (fd.get(`p${i}_dept`)||'').trim(),
+      tel:  (fd.get(`p${i}_tel`)||'').replace(/\\D/g,''),
+      shirt:(fd.get(`p${i}_shirt`)||'')
+    };
+    const valid = p.name && p.empId && p.dept && isPhone10(p.tel) && p.shirt;
+    ok = ok && valid;
+  }
+  if(!ok){ statusBox.textContent = 'กรุณากรอกข้อมูลให้ครบถ้วน'; return; }
+
+  const payload = { phone, email, team, agree, players };
+
+  // ส่งไป Apps Script — ไม่มีป๊อปอัป, แสดงสถานะ inline
+  try{
+    submitBtn.disabled = true;
+    statusBox.textContent = 'กำลังส่งข้อมูล…';
+    const res = await fetch(API_URL, { method:'POST', body: JSON.stringify(payload) });
+    if(!res.ok) throw new Error('Network error');
+    const json = await res.json();
+    if(!json.ok) throw new Error(json.error || 'บันทึกไม่สำเร็จ');
+
+    statusBox.textContent = 'บันทึกสำเร็จ';
+    successBox.style.display = 'block';
+    echo.textContent = JSON.stringify(payload, null, 2);
+    form.reset();
+  }catch(err){
+    statusBox.textContent = 'ผิดพลาด: ' + err.message;
+  }finally{
+    submitBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
