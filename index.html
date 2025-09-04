@@ -3,31 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ROV DREAM WAR – Registration</title>
+<title>ROV DREAM WAR – Registration (Baserow)</title>
 <style>
-  :root {
-  --bg-url: url("https://picsum.photos/1920/1080"); /* ใช้รูป random public */
-  --logo-url: url("https://dummyimage.com/220x96/ffffff/000000.png&text=LOGO");
+  :root{
+    /* เปลี่ยนรูปได้ตามต้องการ */
+    --bg-url: url("https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=1974&auto=format&fit=crop");
+    --logo-url: url("https://dummyimage.com/440x190/ffffff/000000&text=LOGO");
+    --btn-from:#8e0e0e; --btn-to:#c91919;
   }
-
   html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Noto Sans Thai',Arial,sans-serif;background:#000;color:#0d1b2a;}
   body{display:flex;align-items:center;justify-content:center;}
-
-  .stage{position:relative;max-width:100vw;max-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .bg{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain;display:block}
-
-  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .stack{pointer-events:auto;display:flex;flex-direction:column;align-items:center;max-height:90%;overflow:auto;padding:8px 12px}
-
-  .brand{width:min(28vw,220px);height:auto;aspect-ratio:220/96;background:var(--logo-url) center/contain no-repeat;transform:translateY(-20%);margin-bottom:8px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
-
-  .card{width:min(448px,69vw);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-radius:20px;box-shadow:0 12px 30px rgba(0,0,0,.25);padding:18px}
+  .stage{position:relative;max-width:100vw; max-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .bg{max-width:100vw; max-height:100vh; width:auto; height:auto; object-fit:contain; display:block;}
+  .overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;}
+  .stack{pointer-events:auto; display:flex; flex-direction:column; align-items:center; max-height:90%; overflow:auto; padding:8px 12px;}
+  .brand{width:min(28vw, 220px); height:auto; aspect-ratio: 220/96; background:var(--logo-url) center/contain no-repeat; transform: translateY(-20%); margin-bottom: 8px; filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));}
+  .card{width:min(448px, 69vw); background:rgba(255,255,255,.92); backdrop-filter:blur(6px); border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,.25); padding:18px;}
   .title{font-weight:800;text-align:center;margin:0 0 8px;font-size:18px;}
   .grid{display:grid;gap:10px;}
-  .pill{height:54px;border:none;border-radius:999px;background:#fff;padding:0 16px;box-shadow:0 8px 20px rgba(0,0,0,.18);font-size:16px;outline:none}
-  .pill:focus{box-shadow:0 0 0 3px rgba(201,25,25,.18),0 8px 20px rgba(0,0,0,.18)}
+  .pill{height:54px;border:none;border-radius:999px;background:#fff; padding:0 16px;box-shadow:0 8px 20px rgba(0,0,0,.18); font-size:16px;outline:none;}
+  .pill:focus{box-shadow:0 0 0 3px rgba(201,25,25,.18),0 8px 20px rgba(0,0,0,.18);}
   .btn{display:inline-block;padding:12px 22px;border-radius:999px;font-weight:700;border:0;cursor:pointer;}
-  .btn-primary{color:#fff;background:linear-gradient(to bottom,var(--btn-from),var(--btn-to));box-shadow:0 10px 24px rgba(0,0,0,.25)}
+  .btn-primary{color:#fff;background:linear-gradient(to bottom,var(--btn-from),var(--btn-to));box-shadow:0 10px 24px rgba(0,0,0,.25);}
   .btn-outline{background:#fff;color:#b21515;border:2px solid #b21515;}
   .row{display:flex;justify-content:space-between;gap:12px;margin-top:12px;}
   .err{color:#d90429;font-size:13px;margin-top:-6px}
@@ -35,13 +32,10 @@
   .center{text-align:center}
   .progress{font-size:13px;color:#6b7280;text-align:center;margin-top:6px}
   .hidden{display:none!important}
-  .success{color:#0a7a30;font-weight:800;font-size:20px}
-  @media (max-height:640px){ .brand{ transform:translateY(-10%); width:min(32vw,180px); } }
-
+  @media (max-height:640px){ .brand{ transform: translateY(-10%); width:min(32vw, 180px); } .stack{ max-height:88%; } }
   .cta-link{ color:#000; font-weight:700; text-decoration:underline; cursor:pointer; }
   .cta-link:hover{ text-decoration:none; opacity:.85; }
   .cta-row{ margin:8px 0 6px; }
-
   .pdf-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
   .pdf-modal{width:min(1100px,92vw);height:min(90vh,820px);background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
   .pdf-modal header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#111827;color:#fff}
@@ -54,12 +48,8 @@
 </head>
 <body>
 
-  <!-- iframe สำหรับ fallback แบบฟอร์มลับ -->
-  <iframe name="xsubmit" style="display:none"></iframe>
-
   <div class="stage">
     <img id="bg" class="bg" alt="background"/>
-
     <div class="overlay">
       <div class="stack">
         <div class="brand"></div>
@@ -81,7 +71,7 @@
             </span>
           </p>
           <label style="display:block;margin-top:6px">
-            <input type="checkbox" id="agreePdpa"> ผู้ลงทะเบียนได้อ่าน และยินยอม ในการให้ข้อมูล ชื่อ นามสกุล เบอร์ติดต่อ และ EMAIL เพื่อใช้ในการสื่อสาร ในการสมัครร่วมกิจกรรมครั้งนี้เท่านั้น
+            <input type="checkbox" id="agreePdpa"> ยินยอมตาม PDPA สำหรับกิจกรรมนี้เท่านั้น
           </label>
           <div id="errAgreePdpa" class="err hidden">กรุณายอมรับ PDPA ก่อนดำเนินการต่อ</div>
 
@@ -108,7 +98,7 @@
               </span>
             </p>
 
-            <label><input type="checkbox" id="agree"> ผู้ลงทะเบียนได้อ่าน และยอมรับในกฎ กติกา การแข่งขัน</label>
+            <label><input type="checkbox" id="agree"> ยอมรับกฎ กติกา การแข่งขัน</label>
             <div id="errAgree" class="err hidden">กรุณายอมรับกติกาก่อนดำเนินการต่อ</div>
           </div>
           <div class="row">
@@ -154,6 +144,7 @@
           <div class="progress">Player <span id="pProg">1</span> / 6</div>
         </section>
 
+        <!-- Step 5 -->
         <section class="card hidden" id="step5">
           <div style="padding:8px 6px 2px">
             <h1 style="margin:0;font-size:64px;font-weight:1000;color:#d02020;text-align:center;letter-spacing:.5px">
@@ -162,17 +153,9 @@
             <h2 style="margin:14px 0 26px;font-size:40px;font-weight:900;text-align:center;color:#111">
               ขอบคุณที่ท่านตอบรับเข้าร่วมกิจกรรม
             </h2>
-
-            <p style="font-size:28px;text-align:center;color:#111;margin:12px 0">
-              หากต้องการสอบถามข้อมูลเพิ่มเติม
-            </p>
-            <p style="font-size:28px;text-align:center;color:#111;margin:4px 0">
-              กรุณาติดต่อ บริษัท ลิงก์โร้ดทราเวล จำกัด
-            </p>
-            <p style="font-size:40px;text-align:center;margin:10px 0 4px;font-weight:900">
-              096–750–5993
-            </p>
-
+            <p style="font-size:28px;text-align:center;color:#111;margin:12px 0">หากต้องการสอบถามข้อมูลเพิ่มเติม</p>
+            <p style="font-size:28px;text-align:center;color:#111;margin:4px 0">กรุณาติดต่อ บริษัท ลิงก์โร้ดทราเวล จำกัด</p>
+            <p style="font-size:40px;text-align:center;margin:10px 0 4px;font-weight:900">096–750–5993</p>
             <div style="text-align:center;margin-top:18px">
               <button class="btn btn-outline" id="restart" type="button">เริ่มใหม่</button>
             </div>
@@ -183,7 +166,7 @@
     </div>
   </div>
 
-  <!-- Modal PDF -->
+  <!-- PDF Modal -->
   <div class="pdf-modal-backdrop" id="pdfModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
     <div class="pdf-modal" role="document">
       <header>
@@ -198,212 +181,156 @@
   </div>
 
 <script>
-/* ---------- ตั้งรูป bg จากตัวแปร CSS ---------- */
+/* ---------- BG จาก CSS var ---------- */
 (function setBgFromVar(){
   var v = getComputedStyle(document.documentElement).getPropertyValue('--bg-url').trim();
   if(v.startsWith('url(')) v = v.slice(4, -1).replace(/^"|"$/g,'');
   document.getElementById('bg').src = v;
 })();
 
-/* ---------- simple state + autosave ---------- */
-var storageKey = 'rov-dreamwar-simple';
+/* ---------- สถานะฟอร์ม ---------- */
+var storageKey = 'rov-dreamwar-pd';
 var init = {
   phone:'', email:'', agree:false, team:'',
   players: (function(){var a=[]; for(var i=0;i<6;i++){a.push({name:'',empId:'',dept:'',tel:'',shirt:''});} return a;})()
 };
-var data = load() || init;
-var step = 1;
-var pi = 0; // player index 0..5
+var data = load() || JSON.parse(JSON.stringify(init));
+var step = 1, pi = 0;
 
+/* ---------- helper ---------- */
 function save(){ localStorage.setItem(storageKey, JSON.stringify(data)); }
 function load(){ try{ return JSON.parse(localStorage.getItem(storageKey)); }catch(e){ return null; } }
 function qs(id){ return document.getElementById(id); }
-function show(id){
-  var ids = ['step1','step2','step3','step4','step5'];
-  for(var i=0;i<ids.length;i++){ qs(ids[i]).classList.add('hidden'); }
-  qs(id).classList.remove('hidden');
-}
-
-/* ---------- validators ---------- */
+function show(id){ ['step1','step2','step3','step4','step5'].forEach(s=>qs(s).classList.add('hidden')); qs(id).classList.remove('hidden'); }
 function isPhone10(v){ return /^\d{10}$/.test(String(v||'').trim()); }
 function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||'').trim()); }
-function vStep1(){
-  var okP = isPhone10(qs('phone').value);
-  var okE = isEmail(qs('email').value);
-  qs('errPhone').classList.toggle('hidden', okP);
-  qs('errEmail').classList.toggle('hidden', okE);
-  return okP && okE;
-}
-function vStep2(){
-  var ok = qs('agree').checked;
-  qs('errAgree').classList.toggle('hidden', ok);
-  return ok;
-}
-function vStep3(){
-  var t = qs('team').value.trim();
-  var ok = t.length>=2 && t.length<=20;
-  qs('errTeam').classList.toggle('hidden', ok);
-  return ok;
-}
-function vPlayer(){
-  var ok = qs('pName').value && qs('pEmpId').value && qs('pDept').value &&
-           isPhone10(qs('pTel').value) && qs('pShirt').value;
-  qs('errPlayer').classList.toggle('hidden', ok);
-  return ok;
-}
-
-/* ---------- bind inputs to state ---------- */
+function vStep1(){ var okP=isPhone10(qs('phone').value), okE=isEmail(qs('email').value); qs('errPhone').classList.toggle('hidden',okP); qs('errEmail').classList.toggle('hidden',okE); return okP&&okE; }
+function vStep2(){ var ok=qs('agree').checked; qs('errAgree').classList.toggle('hidden',ok); return ok; }
+function vStep3(){ var t=qs('team').value.trim(); var ok=t.length>=2&&t.length<=20; qs('errTeam').classList.toggle('hidden',ok); return ok; }
+function vPlayer(){ var ok=qs('pName').value&&qs('pEmpId').value&&qs('pDept').value&&isPhone10(qs('pTel').value)&&qs('pShirt').value; qs('errPlayer').classList.toggle('hidden',ok); return ok; }
 function syncFromState(){
-  qs('phone').value = data.phone; qs('email').value = data.email;
-  qs('agree').checked = !!data.agree;
-  qs('team').value = data.team;
-  var p = data.players[pi];
-  qs('pIndex').textContent = (pi+1);
-  qs('pProg').textContent = (pi+1);
-  qs('pName').value = p.name; qs('pEmpId').value = p.empId; qs('pDept').value = p.dept;
-  qs('pTel').value = p.tel; qs('pShirt').value = p.shirt;
-  qs('nextP').classList.toggle('hidden', pi===5);
-  qs('submitAll').classList.toggle('hidden', pi!==5);
+  qs('phone').value=data.phone; qs('email').value=data.email;
+  qs('agree').checked=!!data.agree;
+  qs('team').value=data.team;
+  var p=data.players[pi];
+  qs('pIndex').textContent=(pi+1); qs('pProg').textContent=(pi+1);
+  qs('pName').value=p.name; qs('pEmpId').value=p.empId; qs('pDept').value=p.dept; qs('pTel').value=p.tel; qs('pShirt').value=p.shirt;
+  qs('nextP').classList.toggle('hidden',pi===5); qs('submitAll').classList.toggle('hidden',pi!==5);
 }
-function collectStep1(){ data.phone = qs('phone').value.replace(/[^\d]/g,''); data.email = qs('email').value.trim(); save(); }
-function collectStep2(){ data.agree = qs('agree').checked; save(); }
-function collectStep3(){ data.team  = qs('team').value.trim(); save(); }
-function collectPlayer(){
-  var p = data.players[pi];
-  p.name = qs('pName').value.trim();
-  p.empId= qs('pEmpId').value.trim();
-  p.dept = qs('pDept').value.trim();
-  p.tel  = qs('pTel').value.replace(/[^\d]/g,'');
-  p.shirt= qs('pShirt').value;
-  save();
-}
+function collectStep1(){ data.phone=qs('phone').value.replace(/[^\d]/g,''); data.email=qs('email').value.trim(); save(); }
+function collectStep2(){ data.agree=qs('agree').checked; save(); }
+function collectStep3(){ data.team=qs('team').value.trim(); save(); }
+function collectPlayer(){ var p=data.players[pi]; p.name=qs('pName').value.trim(); p.empId=qs('pEmpId').value.trim(); p.dept=qs('pDept').value.trim(); p.tel=qs('pTel').value.replace(/[^\d]/g,''); p.shirt=qs('pShirt').value; save(); }
 
-/* ---------- nav ---------- */
-qs('next1').onclick = function(){
+/* ---------- ปุ่มนำทาง ---------- */
+qs('next1').onclick=function(){
   collectStep1();
+  var okPdpa = qs('agreePdpa') && qs('agreePdpa').checked;
+  if(!okPdpa){ qs('errAgreePdpa').classList.remove('hidden'); return; }
   if(!vStep1()) return;
   step=2; show('step2'); syncFromState();
 };
-qs('back2').onclick = function(){ step=1; show('step1'); syncFromState(); };
-qs('next2').onclick = function(){
-  collectStep2();
-  if(!vStep2()) return;
-  step=3; show('step3'); syncFromState();
-};
-qs('back3').onclick = function(){ step=2; show('step2'); syncFromState(); };
-qs('next3').onclick = function(){
-  collectStep3();
-  if(!vStep3()) return;
-  step=4; show('step4'); syncFromState();
-};
-qs('back4').onclick = function(){ step=3; show('step3'); syncFromState(); };
+qs('back2').onclick=function(){ step=1; show('step1'); syncFromState(); };
+qs('next2').onclick=function(){ collectStep2(); if(!vStep2()) return; step=3; show('step3'); syncFromState(); };
+qs('back3').onclick=function(){ step=2; show('step2'); syncFromState(); };
+qs('next3').onclick=function(){ collectStep3(); if(!vStep3()) return; step=4; show('step4'); syncFromState(); };
+qs('back4').onclick=function(){ step=3; show('step3'); syncFromState(); };
+qs('prevP').onclick=function(){ collectPlayer(); if(pi>0) pi--; syncFromState(); };
+qs('nextP').onclick=function(){ collectPlayer(); if(!vPlayer()) return; if(pi<5) pi++; syncFromState(); };
 
-qs('prevP').onclick = function(){
-  collectPlayer();
-  if(pi>0) pi--; syncFromState();
-};
-qs('nextP').onclick = function(){
-  collectPlayer();
-  if(!vPlayer()) return;
-  if(pi<5) pi++; syncFromState();
-};
+/* ========= ส่งไป BASEROW ========= */
+/* แก้ 2 ค่าให้ถูกต้อง แล้วใช้งานได้ทันที */
+const BASEROW_TABLE_ID = 663776;                  // ← Table ID
+const BASEROW_TOKEN    = "YOUR_DATABASE_TOKEN";    // ← Database Token
 
-/* ====== ส่งข้อมูล: no-cors → sendBeacon → hidden form (ถือว่าสำเร็จ) ====== */
-const API_URL = "https://script.google.com/macros/s/AKfycbz5iajRRwdzm_WhQ_se3msq-SoDUMa1XVXe2LSxVYweRtGXEYbFMqkjzwdew-rZ24D2qw/exec";
+async function sendToBaserow(payload){
+  // map -> ชื่อคอลัมน์ใน Baserow (ต้องสร้างให้ตรง)
+  function p(i, key){ return (payload.players[i] && payload.players[i][key]) || ""; }
+  const row = {
+    timestamp: payload.timestamp,
+    phone: payload.phone,
+    email: payload.email,
+    team_name: payload.team,
+    agree: !!payload.agree,
 
-async function sendViaFetchNoCors(payload){
-  await fetch(API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
-  return true; // หากเบราว์เซอร์รับคำสั่งได้ จะไม่ throw
-}
+    p1_name: p(0,'name'), p1_emp_id: p(0,'empId'), p1_dept: p(0,'dept'), p1_phone: p(0,'tel'), p1_shirt: p(0,'shirt'),
+    p2_name: p(1,'name'), p2_emp_id: p(1,'empId'), p2_dept: p(1,'dept'), p2_phone: p(1,'tel'), p2_shirt: p(1,'shirt'),
+    p3_name: p(2,'name'), p3_emp_id: p(2,'empId'), p3_dept: p(2,'dept'), p3_phone: p(2,'tel'), p3_shirt: p(2,'shirt'),
+    p4_name: p(3,'name'), p4_emp_id: p(3,'empId'), p4_dept: p(3,'dept'), p4_phone: p(3,'tel'), p4_shirt: p(3,'shirt'),
+    p5_name: p(4,'name'), p5_emp_id: p(4,'empId'), p5_dept: p(4,'dept'), p5_phone: p(4,'tel'), p5_shirt: p(4,'shirt'),
+    p6_name: p(5,'name'), p6_emp_id: p(5,'empId'), p6_dept: p(5,'dept'), p6_phone: p(5,'tel'), p6_shirt: p(5,'shirt'),
 
-function sendViaBeacon(payload){
-  try{
-    const ok = navigator.sendBeacon(API_URL, new Blob([JSON.stringify(payload)], {type:'text/plain'}));
-    return ok; // true = ส่งเข้า queue ของ browser แล้ว
-  }catch(_){ return false; }
-}
+    RawJSON: JSON.stringify(payload)   // ถ้ามีคอลัมน์นี้อยู่
+  };
 
-function sendViaHiddenForm(payload){
-  // ฟอร์มลับโพสต์เข้า iframe ที่ซ่อนอยู่
-  const form = document.createElement('form');
-  form.action = API_URL;
-  form.method = 'POST';
-  form.target = 'xsubmit';
-  form.style.display = 'none';
+  const res = await fetch(`https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${BASEROW_TOKEN}`,
+      'Content-Type' : 'application/json'
+    },
+    body: JSON.stringify(row)
+  });
 
-  const ta = document.createElement('textarea');
-  ta.name = 'payload'; // ฝั่ง Apps Script สามารถอ่าน e.postData.contents ได้เหมือนเดิม
-  ta.value = JSON.stringify(payload);
-  form.appendChild(ta);
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(()=> form.remove(), 1000);
-  return true;
+  if(!res.ok){
+    let msg = res.status + ' ' + res.statusText;
+    try{
+      const j = await res.json();
+      msg += ' | ' + (j?.detail || JSON.stringify(j));
+    }catch(e){}
+    throw new Error(msg);
+  }
+  return res.json();
 }
 
 qs('submitAll').onclick = async function(){
   collectPlayer();
   if(!vPlayer()) return;
 
-  var allOk = true;
-  for(var k=0;k<6;k++){
-    var x = data.players[k];
-    if(!(x.name && x.empId && x.dept && isPhone10(x.tel) && x.shirt)){ allOk=false; break; }
-  }
+  var allOk = data.players.every(p => p.name && p.empId && p.dept && isPhone10(p.tel) && p.shirt);
   if(!allOk){ qs('errPlayer').classList.remove('hidden'); return; }
 
   var payload = {
+    timestamp: new Date().toISOString(),
     phone: data.phone,
     email: data.email,
     team:  data.team,
     agree: !!data.agree,
-    players: data.players.map(function(p){ return {name:p.name, empId:p.empId, dept:p.dept, tel:p.tel, shirt:p.shirt}; })
+    players: data.players.map(p => ({name:p.name, empId:p.empId, dept:p.dept, tel:p.tel, shirt:p.shirt}))
   };
 
   disableButtons(true);
   try{
-    // 1) fetch no-cors
-    try { await sendViaFetchNoCors(payload); }
-    catch(e1){
-      // 2) sendBeacon
-      if(!sendViaBeacon(payload)){
-        // 3) hidden form
-        sendViaHiddenForm(payload);
-      }
-    }
+    const result = await sendToBaserow(payload);
+    if(!result?.id) throw new Error('No row id returned');
 
-    // ไม่ว่าใช้วิธีไหน → ถือว่าส่งแล้ว
     localStorage.removeItem(storageKey);
     step=5; show('step5');
   }catch(err){
-    alert('บันทึกล้มเหลว: ' + (err && err.message ? err.message : err));
+    alert('ส่งไม่สำเร็จ: ' + (err && err.message ? err.message : err));
   }finally{
     disableButtons(false);
   }
 };
 
-qs('restart').onclick = function(){
+qs('restart').onclick=function(){
   localStorage.removeItem(storageKey);
   data = JSON.parse(JSON.stringify(init));
   step=1; pi=0; show('step1'); syncFromState();
 };
 
 function disableButtons(disabled){
-  var btns = document.querySelectorAll('button');
-  for(var i=0;i<btns.length;i++){ btns[i].disabled = !!disabled; }
+  document.querySelectorAll('button').forEach(b=>b.disabled=!!disabled);
 }
 
-/* ---------- init ---------- */
-(function initUI(){
-  qs('phone').addEventListener('input', function(e){ e.target.value = e.target.value.replace(/[^\d]/g,''); });
-  qs('pTel').addEventListener('input', function(e){ e.target.value = e.target.value.replace(/[^\d]/g,''); });
-
-  show('step1');
-  syncFromState();
+/* init */
+(function(){
+  qs('phone').addEventListener('input', e=> e.target.value=e.target.value.replace(/[^\d]/g,''));
+  qs('pTel').addEventListener('input',  e=> e.target.value=e.target.value.replace(/[^\d]/g,''));
+  show('step1'); syncFromState();
 })();
 
-/* ========================= Modal PDF ========================= */
+/* PDF modal */
 (function(){
   var backdrop = document.getElementById('pdfModalBackdrop');
   if(!backdrop) return;
@@ -426,23 +353,7 @@ function disableButtons(disabled){
     if(lastActive && lastActive.focus) lastActive.focus();
   };
   function escClose(e){ if(e.key === 'Escape') window.pdfModalClose(); }
-  backdrop.addEventListener('click', function(e){ if(e.target === backdrop) window.pdfModalClose(); });
-})();
-
-/* บังคับติ๊ก PDPA ก่อนกด SUBMIT ใน Step 1 */
-(function(){
-  var btn = document.getElementById('next1');
-  if(!btn) return;
-  var original = btn.onclick;
-  btn.onclick = function(){
-    var ok = document.getElementById('agreePdpa') && document.getElementById('agreePdpa').checked;
-    if(!ok){
-      var err = document.getElementById('errAgreePdpa');
-      if(err) err.classList.remove('hidden');
-      return;
-    }
-    if(original) original();
-  };
+  backdrop.addEventListener('click', e=>{ if(e.target === backdrop) window.pdfModalClose(); });
 })();
 </script>
 </body>
