@@ -263,24 +263,29 @@ async function sendToBaserow(payload){
     RawJSON: JSON.stringify(payload)   // ถ้ามีคอลัมน์นี้อยู่
   };
 
-  const res = await fetch(`https://api.baserow.io/api/database/rows/table/${BASEROW_TABLE_ID}/?user_field_names=true`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${BASEROW_TOKEN}`,
-      'Content-Type' : 'application/json'
-    },
-    body: JSON.stringify(row)
-  });
+  const res = await fetch(url, {
+  method: 'POST',
+  headers: {
+    'Authorization': `Token ${BASEROW_TOKEN}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(row)   // <= row คืออ็อบเจ็กต์ที่คุณ map แล้ว
+});
 
-  if(!res.ok){
-    let msg = res.status + ' ' + res.statusText;
-    try{
-      const j = await res.json();
-      msg += ' | ' + (j?.detail || JSON.stringify(j));
-    }catch(e){}
-    throw new Error(msg);
-  }
-  return res.json();
+// อ่าน response ให้ได้ข้อความชัด ๆ
+let payloadText = await res.text();
+let payloadJson;
+try { payloadJson = JSON.parse(payloadText); } catch (_) {}
+console.log('Baserow response', res.status, payloadJson || payloadText);
+
+if (!res.ok) {
+  // Baserow จะส่งรูปแบบประมาณ {error: 'ERROR...', detail: {...}}
+  const detail = payloadJson?.detail || payloadJson || payloadText;
+  throw new Error(`${res.status} ${res.statusText} – ${typeof detail==='string' ? detail : JSON.stringify(detail)}`);
+}
+
+// สำเร็จ
+return payloadJson;
 }
 
 qs('submitAll').onclick = async function(){
