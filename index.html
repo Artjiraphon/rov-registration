@@ -43,6 +43,7 @@
   .iconbtn{border:0;background:#374151;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
   .iconbtn:hover{filter:brightness(1.05)}
   .pdf-modal .frame{width:100%;height:calc(100% - 52px);border:0}
+  .radio-row{background:#fff;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.18);padding:12px 16px}
 </style>
 </head>
 <body>
@@ -117,7 +118,7 @@
           </div>
         </section>
 
-        <!-- Step 4 -->
+        <!-- Step 4: Player details (with shuttle) -->
         <section class="card hidden" id="step4">
           <h2 class="title">ข้อมูลส่วนบุคคล ผู้เล่นคนที่ <span id="pIndex">1</span></h2>
           <div class="grid">
@@ -130,7 +131,26 @@
               <option>S (รอบอก 38 นิ้ว)</option><option>M (รอบอก 40 นิ้ว)</option><option>L (รอบอก 42 นิ้ว)</option>
               <option>XL (รอบอก 44 นิ้ว)</option><option>2XL (รอบอก 46 นิ้ว)</option><option>3XL (รอบอก 48 นิ้ว)</option>
             </select>
-            <div id="errPlayer" class="err hidden">กรอกข้อมูลให้ครบทุกช่อง และเบอร์ 10 หลัก</div>
+
+            <!-- Shuttle options for EVERY player -->
+            <div class="radio-row">
+              <strong>รถรับส่ง</strong><br>
+              <label><input type="radio" name="pShuttle" value="yes"> ต้องการรถรับส่ง</label>
+              &nbsp;&nbsp;
+              <label><input type="radio" name="pShuttle" value="no"> ไม่ต้องการรถรับส่ง</label>
+              <div class="muted">ต้องเลือก "ต้องการ" ก่อน จึงจะเลือกสายรถได้</div>
+            </div>
+            <select id="pRoute" class="pill hidden">
+              <option value="">เลือกสายรถ</option>
+              <option value="1">เส้นทางที่ 1 เทคโนโลยีสมุทรปราการ</option>
+              <option value="2">เส้นทางที่ 2 พระประแดง</option>
+              <option value="3">เส้นทางที่ 3 อนุสาวรีย์</option>
+              <option value="4">เส้นทางที่ 4 บางขุนเทียน</option>
+              <option value="5">เส้นทางที่ 5 หนองจอก</option>
+            </select>
+            <input id="pDrop" class="pill hidden" placeholder="จุดส่ง (โปรดระบุ)">
+
+            <div id="errPlayer" class="err hidden">กรอกข้อมูลให้ครบทุกช่อง และเบอร์ 10 หลัก (ถ้าเลือกต้องการรถรับส่ง ต้องเลือกสายรถด้วย)</div>
           </div>
           <div class="row">
             <button class="btn btn-outline" id="back4">BACK</button>
@@ -189,7 +209,7 @@
 var storageKey = 'rov-dreamwar-pd';
 var init = {
   phone:'', email:'', agree:false, team:'',
-  players: (function(){var a=[]; for(var i=0;i<6;i++){a.push({name:'',empId:'',dept:'',tel:'',shirt:''});} return a;})()
+  players: (function(){var a=[]; for(var i=0;i<6;i++){a.push({name:'',empId:'',dept:'',tel:'',shirt:'', shuttle:'', route:'', drop:''});} return a;})()
 };
 var data = load() || JSON.parse(JSON.stringify(init));
 var step = 1, pi = 0;
@@ -203,7 +223,15 @@ function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||'').trim
 function vStep1(){ var okP=isPhone10(qs('phone').value), okE=isEmail(qs('email').value); qs('errPhone').classList.toggle('hidden',okP); qs('errEmail').classList.toggle('hidden',okE); return okP&&okE; }
 function vStep2(){ var ok=qs('agree').checked; qs('errAgree').classList.toggle('hidden',ok); return ok; }
 function vStep3(){ var t=qs('team').value.trim(); var ok=t.length>=2&&t.length<=20; qs('errTeam').classList.toggle('hidden',ok); return ok; }
-function vPlayer(){ var ok=qs('pName').value&&qs('pEmpId').value&&qs('pDept').value&&isPhone10(qs('pTel').value)&&qs('pShirt').value; qs('errPlayer').classList.toggle('hidden',ok); return ok; }
+function vPlayer(){
+  var baseOk = qs('pName').value && qs('pEmpId').value && qs('pDept').value && isPhone10(qs('pTel').value) && qs('pShirt').value;
+  var shuttle = document.querySelector('input[name="pShuttle"]:checked');
+  var needRoute = shuttle && shuttle.value==='yes';
+  var routeOk = !needRoute || !!qs('pRoute').value;
+  var ok = baseOk && routeOk;
+  qs('errPlayer').classList.toggle('hidden', ok);
+  return ok;
+}
 function syncFromState(){
   qs('phone').value=data.phone; qs('email').value=data.email;
   qs('agree').checked=!!data.agree;
@@ -211,12 +239,18 @@ function syncFromState(){
   var p=data.players[pi];
   qs('pIndex').textContent=(pi+1); qs('pProg').textContent=(pi+1);
   qs('pName').value=p.name; qs('pEmpId').value=p.empId; qs('pDept').value=p.dept; qs('pTel').value=p.tel; qs('pShirt').value=p.shirt;
+  // shuttle
+  document.querySelectorAll('input[name="pShuttle"]').forEach(r=>r.checked=false);
+  if(p.shuttle){ var r=document.querySelector('input[name="pShuttle"][value="'+p.shuttle+'"]'); if(r) r.checked=true; }
+  qs('pRoute').value=p.route||"";
+  qs('pDrop').value=p.drop||"";
+  toggleShuttleUI();
   qs('nextP').classList.toggle('hidden',pi===5); qs('submitAll').classList.toggle('hidden',pi!==5);
 }
 function collectStep1(){ data.phone=qs('phone').value.replace(/[^\d]/g,''); data.email=qs('email').value.trim(); save(); }
 function collectStep2(){ data.agree=qs('agree').checked; save(); }
 function collectStep3(){ data.team=qs('team').value.trim(); save(); }
-function collectPlayer(){ var p=data.players[pi]; p.name=qs('pName').value.trim(); p.empId=qs('pEmpId').value.trim(); p.dept=qs('pDept').value.trim(); p.tel=qs('pTel').value.replace(/[^\d]/g,''); p.shirt=qs('pShirt').value; save(); }
+function collectPlayer(){ var p=data.players[pi]; p.name=qs('pName').value.trim(); p.empId=qs('pEmpId').value.trim(); p.dept=qs('pDept').value.trim(); p.tel=qs('pTel').value.replace(/[^\d]/g,''); p.shirt=qs('pShirt').value; var sh=document.querySelector('input[name="pShuttle"]:checked'); p.shuttle=sh?sh.value:''; p.route=qs('pRoute').value; p.drop=qs('pDrop').value.trim(); save(); }
 
 qs('next1').onclick=function(){
   collectStep1();
@@ -233,45 +267,28 @@ qs('back4').onclick=function(){ step=3; show('step3'); syncFromState(); };
 qs('prevP').onclick=function(){ collectPlayer(); if(pi>0) pi--; syncFromState(); };
 qs('nextP').onclick=function(){ collectPlayer(); if(!vPlayer()) return; if(pi<5) pi++; syncFromState(); };
 
+// shuttle UI toggle + listeners
+function toggleShuttleUI(){
+  const yes = (document.querySelector('input[name="pShuttle"][value="yes"]')||{}).checked;
+  const dd  = qs('pRoute');
+  const dp  = qs('pDrop');
+  if(!dd||!dp) return;
+  if (yes) { dd.classList.remove('hidden'); dp.classList.remove('hidden'); }
+  else { dd.classList.add('hidden'); dp.classList.add('hidden'); dd.value=''; dp.value=''; }
+}
+
+document.querySelectorAll('input[name="pShuttle"]').forEach(el=>{
+  el.addEventListener('change', toggleShuttleUI);
+});
+
 /* ========= ส่งไป Pipedream ========= */
 const API_URL = "https://eoigtnxxgpnpan3.m.pipedream.net";
-
-async function sendViaFetchNoCors(payload){
-  await fetch(API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
-  return true; // หากเบราว์เซอร์รับคำสั่งได้ จะไม่ throw
-}
-
-function sendViaBeacon(payload){
-  try{
-    const ok = navigator.sendBeacon(API_URL, new Blob([JSON.stringify(payload)], {type:'text/plain'}));
-    return ok; // true = ส่งเข้า queue ของ browser แล้ว
-  }catch(_){ return false; }
-}
-
-function sendViaHiddenForm(payload){
-  // ฟอร์มลับโพสต์เข้า iframe ที่ซ่อนอยู่
-  const form = document.createElement('form');
-  form.action = API_URL;
-  form.method = 'POST';
-  form.target = 'xsubmit';
-  form.style.display = 'none';
-
-  const ta = document.createElement('textarea');
-  ta.name = 'payload'; // ฝั่ง Apps Script สามารถอ่าน e.postData.contents ได้เหมือนเดิม
-  ta.value = JSON.stringify(payload);
-  form.appendChild(ta);
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(()=> form.remove(), 1000);
-  return true;
-}
 
 qs('submitAll').onclick = async function(){
   collectPlayer();
   if(!vPlayer()) return;
 
-  var allOk = data.players.every(p => p.name && p.empId && p.dept && isPhone10(p.tel) && p.shirt);
+  var allOk = data.players.every(p => p.name && p.empId && p.dept && isPhone10(p.tel) && p.shirt && (p.shuttle!=='yes' || !!p.route));
   if(!allOk){ qs('errPlayer').classList.remove('hidden'); return; }
 
   var payload = {
@@ -280,7 +297,7 @@ qs('submitAll').onclick = async function(){
     email: data.email,
     team:  data.team,
     agree: !!data.agree,
-    players: data.players.map(p => ({name:p.name, empId:p.empId, dept:p.dept, tel:p.tel, shirt:p.shirt}))
+    players: data.players.map(p => ({name:p.name, empId:p.empId, dept:p.dept, tel:p.tel, shirt:p.shirt, shuttle:p.shuttle, route:p.route, drop:p.drop}))
   };
 
   disableButtons(true);
